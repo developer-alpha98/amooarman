@@ -311,8 +311,8 @@ document.getElementById("magicAdd").addEventListener("click", () => {
   const available = predefinedChallenges.filter(ch => !items.some(i => i.text === ch));
   if (available.length === 0) return;
 
-  const random15 = available.sort(() => 0.5 - Math.random()).slice(0, 15);
-  random15.forEach(text => {
+  const random5 = available.sort(() => 0.5 - Math.random()).slice(0, 5);
+  random5.forEach(text => {
     items.push({ text, color: getRandomColor() });
   });
 
@@ -327,16 +327,46 @@ function renderList() {
   items.forEach((item, index) => {
     const li = document.createElement("li");
     li.className = removedItems.includes(item.text) ? "dimmed" : "";
-    li.innerHTML = `
-      <span>${item.text}</span>
-      <div class="actions">
-        <i class="fa fa-pencil" onclick="editItem(${index})"></i>
-        <i class="fa fa-times" onclick="removeItem(${index})"></i>
-      </div>`;
+
+    const span = document.createElement("span");
+    span.textContent = item.text;
+
+    const actionsDiv = document.createElement("div");
+    actionsDiv.className = "actions";
+
+    const editIcon = document.createElement("i");
+    editIcon.className = "fa fa-pencil";
+    editIcon.addEventListener("click", () => {
+      const newText = prompt("ویرایش چالش:", item.text);
+      if (newText && !items.some(i => i.text === newText)) {
+        items[index].text = newText;
+        saveData();
+        renderList();
+        clickSound.play();
+      }
+    });
+
+    const removeIcon = document.createElement("i");
+    removeIcon.className = "fa fa-times";
+    removeIcon.addEventListener("click", () => {
+      items.splice(index, 1);
+      saveData();
+      renderList();
+      clickSound.play();
+    });
+
+    actionsDiv.appendChild(editIcon);
+    actionsDiv.appendChild(removeIcon);
+
+    li.appendChild(span);
+    li.appendChild(actionsDiv);
     itemList.appendChild(li);
   });
+
   drawWheel();
 }
+
+
 
 function addItem() {
   const text = itemInput.value.trim();
