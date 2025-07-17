@@ -64,11 +64,15 @@ popupSoundToggle.addEventListener("change", () => {
 });
 
 // کنترل پخش صدای کلیک فقط اگر فعال باشه
-document.addEventListener('click', () => {
+document.addEventListener('click', (e) => {
+  // اگر روی دکمه چرخش کلیک شد، صدای کلیک پخش نکن
+  if (e.target.closest('#spinBtn')) return;
+
   if (clickSoundEnabled && !isMuted) {
     playRandomClickSound();
   }
 });
+
 
 
 // کنترل پخش صدای گردونه فقط اگر فعال باشه
@@ -87,7 +91,7 @@ function playRandomSoundOnce() {
 resetSettings.onclick = () => {
   Swal.fire({
     title: "آیا مطمئنی؟",
-    text: "تمام گزینه‌ها، تم، صدا و تنظیمات ریست خواهند شد!",
+    text: "تمام چالش‌ها، تم، صدا و تنظیمات ریست خواهند شد!",
     icon: "warning",
     showCancelButton: true,
     confirmButtonText: "بله، ریست کن!",
@@ -107,6 +111,11 @@ resetSettings.onclick = () => {
   });
 };
 
+const wheelSpinSound = new Howl({
+  src: ['sfx/wheel_spin.ogg'],
+  loop: true,
+  volume: currentVolume
+});
 
 const allClickSounds = [];
 for (let i = 1; i <= 72; i++) {
@@ -128,6 +137,65 @@ function playRandomClickSound() {
   playedClickSounds.push(randomSound);
 }
 
+const predefinedChallenges = [
+  "بدون استفاده از هیچ اسپل بازی کن.",
+  "بدون استفاده از هیچ کارت لجندری بازی کن.",
+  "بدون استفاده از هیچ کارت وین‌کانشن بازی کن.",
+  "بدون استفاده از هیچ کارت Common بازی کن.",
+  "فقط از کارت‌های Common استفاده کن.",
+  "فقط از کارت‌های Rare استفاده کن.",
+  "فقط از کارت‌های Epic استفاده کن.",
+  "فقط از کارت‌های لجندری استفاده کن.",
+  "نایت و والکری و باهم در دکت قرار بده",
+  "هربار وین کاندیشینر استفاده کردی باید بلافاصله اون رو میرور کنی",
+  "میانگین اکسیر زیر 3 باشه",
+  "میانگین اکسیر دک بالای 5 باشه",
+  "کارت‌ها را فقط از یک آرنا انتخاب کن.",
+  "فقط کارت‌های ارزون (۲ الکسیر یا کمتر) استفاده کن.",
+  "فقط کارت‌های گرون (۴ الکسیر یا بیشتر) استفاده کن.",
+  "تمام کارت‌های دکت از یک نوع انتخاب کن (مثلا همه بیلدینگ یا همه اسپل).",
+  "فقط کارت‌های زمینی استفاده کن.",
+  "فقط کارت‌های هوایی استفاده کن.",
+  "فقط کارت های بیشتر از 3 نفر استفاده کن مثل خفاش یا اسکلت آرمی",
+  "فقط با اسپل ریج میتونی دمیج بدی",
+  "فقط از کارت های range استفاده کن.",
+  "فقط کارت های تانک استفاده کن.",
+  "در بازی فقط 3 بار از وین کاندیشینرت استفاده کن.",
+  "هیچ بیلدینگی در دک قرار نده.",
+  "یک دک سنگین (میانگین الکسیر بالا) بساز و بازی کن.",
+  "یک دک سبک (میانگین الکسیر پایین) بساز و بازی کن.",
+  "با یکی از بیننده‌ها یا دوستان کلن بازی کن.",
+  "به یکی داخل چت لینک دوستی بده و باهاش بازی کن.",
+  "برو تو لایو یه نفر دیگه و بنویس هایاح",
+  "یکی از ادمینا دک بعدیتو پیشنهاد بده",
+  "با هر دونیت هنگام بازی تا 5 ثانیه چشمتو ببند.",
+  "هر بار یکی لایو و لایک کرد، تا 10 ثانیه کارت نریز.",
+  "تا ۳۰ ثانیه اول بازی هیچ کارتی نگذار (صبر کن).",
+  "تا پایان بازی فقط دفاع کن (حمله نکن).",
+  "قبل از گذاشتن هر کارت ۱۰ ثانیه صبر کن.",
+  "هر بار ۳ که کارت استفاده کردی، ۵ ثانیه صبر کن.",
+  "فقط وقتی اکسیرت به ۱۰ رسید کارت بریز.",
+  "یک دقیقه اول بازی فقط دفاع کن و بعد از آن فقط حمله کن.",
+  "فقط ۳۰ ثانیه اول بازی حمله کن، بقیه زمان دفاع کن.",
+  "هر ۱۰ ثانیه فقط یک کارت استفاده کن.",
+  "در بازی فقط ۵ نوع کارت میتونی بندازی.",
+  "هیچ‌وقت مستقیم روی تاور دشمن اسپل ننداز (مثل راکت روی تاور).",
+  "بدون کارت بیلدینگ بتل بزن",
+  "بدون وین کاندیشن بتل بزن",
+  "بدون کارت اسپل بتل بزن",
+  "با دک حریف قبلی بتل بزن",
+  "کینگ تاور حریفو فعال کن",
+  "با ترکیب رندوم بتل بزن",
+  "بدون اولوشن بتل بزن",
+  "به یکی از فرندهات درخواست بتل بده",
+  "تا ۳۰ ثانیه اول بازی هیچ کارتی ننداز",
+  "کارت اول حریف رو دفاع نکن",
+  "بزار یکی از تاور هاتو بگیره ازت",
+  "با یکی از بچه های لایو بتل بزن",
+  "با دونیتر بعدی فرندلی بتل بزنید",
+  "لینک فرندتو به دونیتر بعدی بده",
+  "با دونیتر قبلی فرندلی بتل بزن"
+];
 
 
 const allSounds = [];
@@ -157,7 +225,7 @@ function playRandomSoundOnce() {
 
 const colors = [
   "#e7000c", "#9f0713", "#460809", "#f54900",
-  "#9f2d00", "#441305", "#e17101", "#963c00",
+  "#9f2d00", "#517e9c", "#e17101", "#963c00",
   "#cf8800", "#894b00", "#5ea500", "#3d6300",
   "#00a73e", "#016632", "#009866", "#015f45",
   "#00968a", "#005f5c", "#0092b9", "#005f78",
@@ -239,6 +307,20 @@ function drawWheel() {
   });
 }
 
+document.getElementById("magicAdd").addEventListener("click", () => {
+  const available = predefinedChallenges.filter(ch => !items.some(i => i.text === ch));
+  if (available.length === 0) return;
+
+  const random15 = available.sort(() => 0.5 - Math.random()).slice(0, 15);
+  random15.forEach(text => {
+    items.push({ text, color: getRandomColor() });
+  });
+
+  saveData();
+  renderList();
+});
+
+
 function renderList() {
   itemList.innerHTML = "";
 
@@ -277,7 +359,7 @@ function removeItem(index) {
 }
 
 function editItem(index) {
-  const newText = prompt("ویرایش گزینه:", items[index].text);
+  const newText = prompt("ویرایش چالش:", items[index].text);
   if (newText && !items.find(i => i.text === newText)) {
     items[index].text = newText;
     saveData();
@@ -292,9 +374,9 @@ function spinWheel() {
   if (activeItems.length === 0) {
     playRandomSoundOnce();
     Swal.fire({
-      width: "90%", // یا "80%" در موبایل
-      title: "هیچ گزینه‌ای وجود ندارد!",
-      text: "لطفاً ابتدا گزینه‌هایی اضافه کنید",
+      width: "90%",
+      title: "هیچ چالش‌ای وجود ندارد!",
+      text: "لطفاً ابتدا چالش‌هایی اضافه کنید",
       icon: "warning",
       customClass: {
         popup: 'yekanBakh',
@@ -302,35 +384,36 @@ function spinWheel() {
         content: 'yekanBakh',
         confirmButton: 'yekanBakh'
       },
-      showClass: {
-        popup: 'animate__animated animate__bounceIn'
-      },
-      hideClass: {
-        popup: 'animate__animated animate__fadeOut'
-      }
+      showClass: { popup: 'animate__animated animate__bounceIn' },
+      hideClass: { popup: 'animate__animated animate__fadeOut' }
     });
     return;
   }
 
   const count = activeItems.length;
   const anglePerItem = 360 / count;
-
   const selectedIndex = Math.floor(Math.random() * count);
-  const stopAngle = (selectedIndex * anglePerItem) +           Math.floor(Math.random() * (anglePerItem - 5)) + 5;
-
-  const extraRotation = 360 * (Math.floor(Math.random() * 6) + 3); // 3 to 8 full spins
+  const stopAngle = (selectedIndex * anglePerItem) + Math.floor(Math.random() * (anglePerItem - 5)) + 5;
+  const extraRotation = 360 * (Math.floor(Math.random() * 6) + 3);
   const totalRotation = extraRotation + stopAngle;
-
   currentRotation += totalRotation;
+
+  // ⬅️ پخش صدای چرخش
+  if (!isMuted && popupSoundEnabled) {
+    wheelSpinSound.play();
+  }
 
   canvas.style.transition = "transform 5s ease-out";
   canvas.style.transform = `rotate(-${currentRotation}deg)`;
 
   setTimeout(() => {
+    // ⬅️ توقف صدای چرخش
+    wheelSpinSound.stop();
+
     const normalizedRotation = (currentRotation % 360 + 360) % 360;
     const selected = activeItems[Math.floor((normalizedRotation) / anglePerItem) % count];
 
-    playRandomSoundOnce(); // صدا قبل از Swal
+    playRandomSoundOnce();
 
     Swal.fire({
       title: "🎲 نتیجه گردونه شانس",
@@ -344,15 +427,12 @@ function spinWheel() {
         content: 'yekanBakh',
         confirmButton: 'yekanBakh'
       },
-      showClass: {
-        popup: 'animate__animated animate__bounceIn'
-      },
-      hideClass: {
-        popup: 'animate__animated animate__fadeOut'
-      },
+      showClass: { popup: 'animate__animated animate__bounceIn' },
+      hideClass: { popup: 'animate__animated animate__fadeOut' },
       background: document.body.classList.contains("dark") ? "#2c2c3c" : "#ffffff",
       color: document.body.classList.contains("dark") ? "#f1f1f1" : "#000000"
     });
+
     if (autoRemove.checked) {
       removedItems.push(selected.text);
       saveData();
@@ -360,6 +440,7 @@ function spinWheel() {
     renderList();
   }, 5200);
 }
+
 
 addBtn.onclick = addItem;
 spinBtn.onclick = spinWheel;
@@ -386,7 +467,7 @@ resetRemoved.onclick = () => {
 themeToggle.onclick = () => {
   document.body.classList.toggle("dark");
   themeToggle.innerHTML = document.body.classList.contains("dark")
-    ? '<i class="fa fa-sun"></i>' : '<i class="fa fa-moon"></i>';
+      ? '<i class="fa fa-sun"></i>' : '<i class="fa fa-moon"></i>';
   saveData();
 };
 

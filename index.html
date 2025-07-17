@@ -14,60 +14,62 @@
 </head>
 
 <body>
-  <header class="header-bg">
-    <button id="themeToggle">
-      <i class="fa fa-moon"></i></button>
+<header class="header-bg">
+  <button id="themeToggle">
+    <i class="fa fa-moon"></i></button>
 
-    <img src="img/logo.png" alt="Logo" class="header__logo" />
-  </header>
+  <img src="img/logo.png" alt="Logo" class="header__logo" />
+</header>
 
-  <main>
-    <div class="wheel-wrapper">
-      <div class="wheel-container">
-        <canvas id="wheelCanvas" width="420" height="420"></canvas>
-        <div class="wheel-arrow"></div>
-        <button id="spinBtn"><i class="fa fa-play"></i></button>
-      </div>
+<main>
+  <div class="wheel-wrapper">
+    <div class="wheel-container">
+      <canvas id="wheelCanvas" width="420" height="420"></canvas>
+      <div class="wheel-arrow"></div>
+      <button id="spinBtn"><i class="fa fa-play"></i></button>
+    </div>
+  </div>
+
+  <div class="input-section">
+    <div class="input-group">
+      <!-- در داخل input-group، بعد از دکمه افزودن -->
+      <i id="magicAdd" class="fa fa-wand-magic-sparkles" title="افزودن ۱۵ چالش تصادفی" style="margin-left: 10px; margin-top: 15px; cursor: pointer; color: #fff; font-size: 20px;"></i>
+      <input id="itemInput" type="text" placeholder="چالش مورد نظر را بنویسید..." />
+      <button id="addBtn">افزودن</button>
+    </div>
+    <ul id="itemList"></ul>
+  </div>
+
+  <div class="controls clash-bg">
+    <label><input type="checkbox" id="autoRemove"> حذف خودکار</label>
+    <i class="fa fa-trash" id="clearAll" title="حذف همه"></i>
+    <i class="fa fa-rotate-left" id="resetRemoved" title="برگرداندن حذف‌شده‌ها"></i>
+  </div>
+</main>
+
+<footer class="footer-bg">
+  <div class="sound-controls clash-bg">
+    <i class="fa fa-volume-xmark" id="muteToggle" title="قطع/وصل صدا"></i>
+    <input type="range" id="volumeSlider" min="0" max="100" value="100" title="تنظیم صدا">
+    <div class="controls" style="display: flex; flex-direction: row; gap: 10px;">
+      <label>
+        <input type="checkbox" id="clickSoundToggle" />
+        صدای کلیک
+      </label>
+      <label>
+        <input type="checkbox" id="popupSoundToggle" />
+        صدای گردونه
+      </label>
     </div>
 
-    <div class="input-section">
-      <div class="input-group">
-        <input id="itemInput" type="text" placeholder="گزینه‌ای وارد کنید..." />
-        <button id="addBtn">افزودن</button>
-      </div>
-      <ul id="itemList"></ul>
-    </div>
+    <i class="fa fa-trash-can" id="resetSettings" title="ریست همه تنظیمات"></i>
+  </div>
 
-    <div class="controls clash-bg">
-      <label><input type="checkbox" id="autoRemove"> حذف خودکار</label>
-      <i class="fa fa-trash" id="clearAll" title="حذف همه"></i>
-      <i class="fa fa-rotate-left" id="resetRemoved" title="برگرداندن حذف‌شده‌ها"></i>
-    </div>
-  </main>
+  <p> ساخته شده توسط <a class="footer-bg__link" href="https://t.me/aslehkari" target="_blank">اصل کاری</a></p>
 
-  <footer class="footer-bg">
-    <div class="sound-controls clash-bg">
-      <i class="fa fa-volume-xmark" id="muteToggle" title="قطع/وصل صدا"></i>
-      <input type="range" id="volumeSlider" min="0" max="100" value="100" title="تنظیم صدا">
-      <div class="controls" style="display: flex; flex-direction: row; gap: 10px;">
-        <label>
-          <input type="checkbox" id="clickSoundToggle" />
-          صدای کلیک
-        </label>
-        <label>
-          <input type="checkbox" id="popupSoundToggle" />
-          صدای گردونه
-        </label>
-      </div>
+</footer>
 
-      <i class="fa fa-trash-can" id="resetSettings" title="ریست همه تنظیمات"></i>
-    </div>
-
-    <p> ساخته شده توسط <a class="footer-bg__link" href="https://t.me/aslehkari" target="_blank">اصل کاری</a></p>
-
-  </footer>
-
-  <script src="script/script.js"></script>
+<script src="script/script.js"></script>
 </body>
 
 </html>
