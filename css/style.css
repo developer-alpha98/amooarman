@@ -5,14 +5,14 @@
 }
 
 :root {
-  --bg: url("../img/bg-pattern-light.png");
+  --bg: url("../img/bg-pattern-light.jpg");
   --text: #000000;
   --accent: #6c5ce7;
   --item-bg: #f0f0f0;
 }
 
 body.dark {
-  --bg: url("../img/bg-pattern-dark.png");
+  --bg: url("../img/bg-pattern-dark.jpg");
   --text: #f1f1f1;
   --item-bg: #2c2c3c;
 }
@@ -80,7 +80,7 @@ h1 {
 
 #wheelCanvas {
   width: 100%;
-  max-width: 400px; /* یا هر حداکثر اندازه‌ای که می‌خوای */
+  max-width: 420px; /* یا هر حداکثر اندازه‌ای که می‌خوای */
   height: auto;
   aspect-ratio: 1 / 1;
   border-radius: 50%;

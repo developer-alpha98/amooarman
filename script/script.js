@@ -65,8 +65,11 @@ popupSoundToggle.addEventListener("change", () => {
 
 // کنترل پخش صدای کلیک فقط اگر فعال باشه
 document.addEventListener('click', () => {
-  if (clickSoundEnabled) playRandomClickSound();
+  if (clickSoundEnabled && !isMuted) {
+    playRandomClickSound();
+  }
 });
+
 
 // کنترل پخش صدای گردونه فقط اگر فعال باشه
 function playRandomSoundOnce() {
@@ -400,8 +403,4 @@ document.fonts.ready.then(renderList);
 window.addEventListener('resize', () => {
   resizeCanvas();
   renderList();
-});
-
-document.addEventListener('click', () => {
-  playRandomClickSound();
 });
