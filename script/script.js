@@ -367,6 +367,14 @@ clearAll.onclick = () => {
   saveData();
   renderList();
 };
+
+itemInput.addEventListener("keydown", function (e) {
+  if (e.key === "Enter") {
+    e.preventDefault(); // جلوگیری از ارسال فرم یا اضافه شدن خط جدید
+    addItem(); // اجرای تابع افزودن
+  }
+});
+
 resetRemoved.onclick = () => {
   removedItems = [];
   saveData();
