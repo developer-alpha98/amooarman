@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>گردونه شانس عمو آرمان</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/animate.min.css" />
+  <script src="script/sweetalert2@11"></script>
+  <script src="script/howler.min.js"></script>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+  <header class="header-bg">
+    <button id="themeToggle">
+      <i class="fa fa-moon"></i></button>
+
+    <img src="img/logo.png" alt="Logo" class="header__logo" />
+  </header>
+
+  <main>
+    <div class="wheel-wrapper">
+      <div class="wheel-container">
+        <canvas id="wheelCanvas" width="420" height="420"></canvas>
+        <div class="wheel-arrow"></div>
+        <button id="spinBtn"><i class="fa fa-play"></i></button>
+      </div>
+    </div>
+
+    <div class="input-section">
+      <div class="input-group">
+        <input id="itemInput" type="text" placeholder="گزینه‌ای وارد کنید..." />
+        <button id="addBtn">افزودن</button>
+      </div>
+      <ul id="itemList"></ul>
+    </div>
+
+    <div class="controls clash-bg">
+      <label><input type="checkbox" id="autoRemove"> حذف خودکار</label>
+      <i class="fa fa-trash" id="clearAll" title="حذف همه"></i>
+      <i class="fa fa-rotate-left" id="resetRemoved" title="برگرداندن حذف‌شده‌ها"></i>
+    </div>
+  </main>
+
+  <footer class="footer-bg">
+    <div class="sound-controls clash-bg">
+      <i class="fa fa-volume-xmark" id="muteToggle" title="قطع/وصل صدا"></i>
+      <input type="range" id="volumeSlider" min="0" max="100" value="100" title="تنظیم صدا">
+      <div class="controls" style="display: flex; flex-direction: row; gap: 10px;">
+        <label>
+          <input type="checkbox" id="clickSoundToggle" />
+          صدای کلیک
+        </label>
+        <label>
+          <input type="checkbox" id="popupSoundToggle" />
+          صدای گردونه
+        </label>
+      </div>
+
+      <i class="fa fa-trash-can" id="resetSettings" title="ریست همه تنظیمات"></i>
+    </div>
+
+    <p> ساخته شده توسط <a class="footer-bg__link" href="https://t.me/aslehkari" target="_blank">اصل کاری</a></p>
+
+  </footer>
+
+  <script src="script/script.js"></script>
+</body>
+
+</html>
