@@ -189,7 +189,7 @@ const predefinedChallenges = [
 
 
 const allSounds = [];
-for (let i = 1; i <= 17; i++) {
+for (let i = 1; i <= 29; i++) {
   allSounds.push(new Howl({ src: [`sfx/popup/popup${i}.ogg`] }));
 }
 
@@ -288,7 +288,7 @@ function drawWheel() {
       text = text.slice(0, 19) + '...';
     }
 
-    const fontSize = Math.max(10, width * 0.034);
+    const fontSize = Math.max(10, width * 0.032);
     ctx.font = `${fontSize}px YekanBakh`;
     ctx.fillStyle = '#fff';
     ctx.textBaseline = 'middle';
