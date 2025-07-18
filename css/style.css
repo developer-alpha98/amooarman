@@ -52,7 +52,7 @@ footer {
 }
 
 .header__logo {
-  width: clamp(360px, 30%, 480px);
+  width: clamp(220px, 30%, 480px);
   height: auto;
   object-fit: contain;
 }
@@ -73,19 +73,19 @@ h1 {
 }
 
 .wheel-container {
+  width: 80vw; /* پهنا متناسب با صفحه */
+  max-width: 700px; /* حداکثر برای دسکتاپ */
+  aspect-ratio: 1/1;
   position: relative;
-
 }
 
 #wheelCanvas {
   width: 100%;
-  height: auto;
-  aspect-ratio: 1 / 1;
+  height: 100%;
   border-radius: 50%;
   border: 6px solid var(--accent);
   background: #ccc;
-  transform: rotate(0deg);
-  transition: transform 5s cubic-bezier(0.33, 1, 0.68, 1);
+  display: block;
 }
 
 .wheel-arrow {
@@ -177,7 +177,7 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 20px;
   margin: 20px 0;
   font-size: 14px;
   color: #fff;
@@ -247,14 +247,7 @@ h1 {
   }
 }
 
-/* SweetAlert custom styling */
-.yekan-font {
-  font-family: 'YekanBakh', sans-serif !important;
-}
 
-.yekan-font * {
-  font-family: 'YekanBakh', sans-serif !important;
-}
 
 .swal2-popup.yekan-font {
   border-radius: 20px !important;
@@ -426,4 +419,75 @@ body.dark .last-selected-box {
   accent-color: var(--accent);
   cursor: pointer;
   direction: ltr;
+}
+
+/* ✅ موبایل: تا 767px */
+@media (max-width: 767px) {
+  .wheel-container {
+    width: 300px !important;
+    height: 300px !important;
+  }
+
+  #spinBtn {
+    width: 50px;
+    height: 50px;
+    font-size: 16px;
+  }
+
+  .swal2-popup {
+    width: 95% !important;
+    padding: 25px 15px !important;
+  }
+}
+
+/* ✅ تبلت: 768px تا 991px */
+@media (min-width: 768px) and (max-width: 991px) {
+  .wheel-container {
+    width: 400px !important;
+    height: 400px !important;
+  }
+
+  #spinBtn {
+    width: 60px;
+    height: 60px;
+    font-size: 18px;
+  }
+
+  .swal2-popup {
+    width: 80% !important;
+    padding: 30px 20px !important;
+  }
+
+  .swal2-title.yekan-font {
+    font-size: 22px !important;
+  }
+
+  .swal2-content.yekan-font {
+    font-size: 17px !important;
+  }
+
+  .swal2-confirm.yekan-font {
+    font-size: 15px !important;
+    padding: 10px 26px !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .swal2-popup.yekan-font {
+    width: 95% !important;
+    padding: 20px !important;
+  }
+
+  .swal2-title.yekan-font {
+    font-size: 20px !important;
+  }
+
+  .swal2-content.yekan-font {
+    font-size: 16px !important;
+  }
+
+  .swal2-confirm.yekan-font {
+    font-size: 14px !important;
+    padding: 8px 20px !important;
+  }
 }

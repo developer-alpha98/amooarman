@@ -75,16 +75,7 @@ document.addEventListener('click', (e) => {
 
 
 // کنترل پخش صدای گردونه فقط اگر فعال باشه
-function playRandomSoundOnce() {
-  if (!popupSoundEnabled) return;
-  if (playedSounds.length === allSounds.length) playedSounds = [];
 
-  const remainingSounds = allSounds.filter(sound => !playedSounds.includes(sound));
-  const randomSound = remainingSounds[Math.floor(Math.random() * remainingSounds.length)];
-
-  randomSound.play();
-  playedSounds.push(randomSound);
-}
 
 // ریست کامل همه تنظیمات
 resetSettings.onclick = () => {
@@ -270,36 +261,59 @@ function saveData() {
 }
 
 function drawWheel() {
-  const activeItems = items.filter(i => !removedItems.includes(i.text));
-  const count = activeItems.length;
-  if (count === 0) return;
-  const angle = 2 * Math.PI / count;
-  const radius = canvas.width / 2;
+  const width = canvas.clientWidth;
+  const height = canvas.clientHeight;
+  const centerX = width / 2;
+  const centerY = height / 2;
+  const radius = Math.min(width, height) / 2;
 
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, width, height);
 
-  activeItems.forEach((item, i) => {
-    const start = i * angle;
-    const end = start + angle;
+  const sliceAngle = (2 * Math.PI) / items.length;
+
+  items.forEach((item, i) => {
+    const startAngle = i * sliceAngle;
+    const endAngle = startAngle + sliceAngle;
+
     ctx.beginPath();
-    ctx.moveTo(radius, radius);
-    ctx.arc(radius, radius, radius, start, end);
-    ctx.fillStyle = item.color || colors[i % colors.length];
+    ctx.moveTo(centerX, centerY);
+    ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+    ctx.closePath();
+    ctx.fillStyle = item.color;
     ctx.fill();
 
-    ctx.save();
-    ctx.translate(radius, radius);
-    ctx.rotate(start + angle / 2);
-    ctx.textAlign = "right";
-    ctx.fillStyle = "#fff";
-    const baseSize = canvas.width / (window.devicePixelRatio || 1); // مثلاً 600
-    const fontSize = Math.max(8, baseSize * 0.032); // 2.5٪ از قطر چرخ
-    ctx.font = `${fontSize}px YekanBakh`;
+    // متن
+    let text = item.text;
+    if (text.length > 22) {
+      text = text.slice(0, 19) + '...';
+    }
 
-    const text = item.text.length > 22 ? item.text.substring(0, 19) + "..." : item.text;
-    ctx.fillText(text, radius - 10, 5);
+    const fontSize = Math.max(10, width * 0.034);
+    ctx.font = `${fontSize}px YekanBakh`;
+    ctx.fillStyle = '#fff';
+    ctx.textBaseline = 'middle';
+    ctx.textAlign = 'left'; // مهم: متن رو از چپ رسم می‌کنیم
+
+    // محاسبه‌ی طول متن
+    const textWidth = ctx.measureText(text).width;
+
+    const padding = radius * 0.4; // فاصله‌ی ثابت از دایره
+
+    ctx.save();
+    ctx.translate(centerX, centerY);
+    ctx.rotate(startAngle + sliceAngle / 2);
+
+    // متن رو طوری رسم می‌کنیم که ابتدای واقعی متن از دایره فاصله‌ی ثابت داشته باشه
+    ctx.fillText(text, radius - padding - textWidth / 2, 0);
     ctx.restore();
   });
+}
+
+
+
+function render() {
+  resizeCanvas();
+  drawWheel();
 }
 
 document.getElementById("magicAdd").addEventListener("click", () => {
@@ -519,7 +533,7 @@ document.fonts.ready.then(renderList);
 
 window.addEventListener('resize', () => {
   resizeCanvas();
-  renderList();
+  drawWheel();
 });
 
 const wheelSizeSlider = document.getElementById("wheelSizeSlider");
@@ -536,20 +550,26 @@ wheelSizeSlider.addEventListener("input", () => {
 
 function setWheelSize(size) {
   const container = document.querySelector(".wheel-container");
+  const screenWidth = window.innerWidth;
+
+  if (screenWidth <= 767) {
+    size = 300;
+  } else if (screenWidth <= 991) {
+    size = 400;
+  }
+
   container.style.width = `${size}px`;
   container.style.height = `${size}px`;
   resizeCanvas(size);
   drawWheel();
 }
 
+
+
 function resizeCanvas() {
-  const size = parseInt(localStorage.getItem("wheelSize")) || 700;
-  const scale = window.devicePixelRatio || 1;
-
-  canvas.width = size * scale;
-  canvas.height = size * scale;
-  canvas.style.width = `${size}px`;
-  canvas.style.height = `${size}px`;
-
-  ctx.setTransform(scale, 0, 0, scale, 0, 0); // برای وضوح بالا
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = canvas.clientWidth * dpr;
+  canvas.height = canvas.clientHeight * dpr;
+  ctx.setTransform(1, 0, 0, 1, 0, 0); // ریست هر اسکیل قبلی
+  ctx.scale(dpr, dpr); // مقیاس برای رسم دقیق
 }
