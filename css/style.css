@@ -52,9 +52,9 @@ footer {
 }
 
 .header__logo {
-  max-width: 40%;
-  min-width: 30%;
-  height: 100%;
+  width: clamp(360px, 30%, 480px);
+  height: auto;
+  object-fit: contain;
 }
 
 
@@ -67,20 +67,18 @@ h1 {
 .wheel-wrapper {
   display: flex;
   justify-content: center;
-  margin-top: 30px;
-  margin-bottom: 60px;
+  margin-top: 0;
+  margin-bottom: 30px;
   position: relative;
 }
 
 .wheel-container {
   position: relative;
-  width: 420px;
-  height: 420px;
+
 }
 
 #wheelCanvas {
   width: 100%;
-  max-width: 420px; /* یا هر حداکثر اندازه‌ای که می‌خوای */
   height: auto;
   aspect-ratio: 1 / 1;
   border-radius: 50%;
@@ -107,6 +105,7 @@ h1 {
   position: absolute;
   top: 50%;
   left: 50%;
+  margin-top: 5px;
   transform: translate(-50%, -50%);
   width: 60px;
   height: 60px;
@@ -114,7 +113,8 @@ h1 {
   border: none;
   border-radius: 50%;
   color: #fff;
-  font-size: 18px;
+  padding: 5px 0 0 5px;
+  font-size: 20px;
   cursor: pointer;
   z-index: 5;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -155,7 +155,7 @@ h1 {
   list-style: none;
   padding: 0;
   margin: 10px auto;
-  max-width: 450px;
+  max-width: 500px;
 }
 
 #itemList li {
@@ -390,3 +390,40 @@ h1 {
   user-select: none;
 }
 
+.last-selected-box {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px 20px;
+  border-radius: 10px;
+  max-width: 90%;
+  margin-inline: auto;
+  color: var(--accent);
+  background-color: white;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+body.dark .last-selected-box {
+  background-color: #1f1f1f;
+  color: var(--accent);
+  box-shadow: 0 2px 10px rgba(255,255,255,0.1);
+  margin-bottom: 25px;
+}
+.wheel-size-slider {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: #fff;
+}
+
+#wheelSizeSlider {
+  width: 100px;
+  accent-color: var(--accent);
+  cursor: pointer;
+  direction: ltr;
+}

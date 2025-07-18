@@ -14,7 +14,6 @@ let removedItems = JSON.parse(localStorage.getItem("removedItems")) || [];
 let theme = localStorage.getItem("theme") || "light";
 let autoRemoveState = localStorage.getItem("autoRemoveState") === "true";
 let currentRotation = 0;
-let font = "13px YekanBakh";
 let firstInteraction = false;
 
 const muteToggle = document.getElementById("muteToggle");
@@ -151,8 +150,8 @@ const predefinedChallenges = [
   "میانگین اکسیر زیر 3 باشه",
   "میانگین اکسیر دک بالای 5 باشه",
   "کارت‌ها را فقط از یک آرنا انتخاب کن.",
-  "فقط کارت‌های ارزون (۲ الکسیر یا کمتر) استفاده کن.",
-  "فقط کارت‌های گرون (۴ الکسیر یا بیشتر) استفاده کن.",
+  "فقط کارت‌های ارزون (۲ اکسیر یا کمتر) استفاده کن.",
+  "فقط کارت‌های گرون (۴ اکسیر یا بیشتر) استفاده کن.",
   "تمام کارت‌های دکت از یک نوع انتخاب کن (مثلا همه بیلدینگ یا همه اسپل).",
   "فقط کارت‌های زمینی استفاده کن.",
   "فقط کارت‌های هوایی استفاده کن.",
@@ -162,8 +161,8 @@ const predefinedChallenges = [
   "فقط کارت های تانک استفاده کن.",
   "در بازی فقط 3 بار از وین کاندیشینرت استفاده کن.",
   "هیچ بیلدینگی در دک قرار نده.",
-  "یک دک سنگین (میانگین الکسیر بالا) بساز و بازی کن.",
-  "یک دک سبک (میانگین الکسیر پایین) بساز و بازی کن.",
+  "یک دک سنگین (میانگین اکسیر بالا) بساز و بازی کن.",
+  "یک دک سبک (میانگین اکسیر پایین) بساز و بازی کن.",
   "با یکی از بیننده‌ها یا دوستان کلن بازی کن.",
   "به یکی داخل چت لینک دوستی بده و باهاش بازی کن.",
   "برو تو لایو یه نفر دیگه و بنویس هایاح",
@@ -241,11 +240,7 @@ function getRandomColor() {
   return colors[Math.floor(Math.random() * colors.length)];
 }
 
-function resizeCanvas() {
-  const size = Math.min(window.innerWidth, 400); // حداکثر تا 400px برای موبایل
-  canvas.width = size;
-  canvas.height = size;
-}
+
 
 if (theme === "dark") {
   document.body.classList.add("dark");
@@ -260,11 +255,9 @@ if (!localStorage.getItem("theme")) {
   themeToggle.innerHTML = '<i class="fa fa-sun"></i>';
 }
 
-function resizeCanvas() {
-  const size = Math.min(window.innerWidth, 400); // حداکثر تا 400px برای موبایل
-  canvas.width = size;
-  canvas.height = size;
-}
+
+
+
 
 // Restore checkbox state
 autoRemove.checked = autoRemoveState;
@@ -299,9 +292,11 @@ function drawWheel() {
     ctx.rotate(start + angle / 2);
     ctx.textAlign = "right";
     ctx.fillStyle = "#fff";
-    ctx.font = "15px YekanBakh";
+    const baseSize = canvas.width / (window.devicePixelRatio || 1); // مثلاً 600
+    const fontSize = Math.max(8, baseSize * 0.032); // 2.5٪ از قطر چرخ
+    ctx.font = `${fontSize}px YekanBakh`;
 
-    const text = item.text.length > 15 ? item.text.substring(0, 12) + "..." : item.text;
+    const text = item.text.length > 22 ? item.text.substring(0, 19) + "..." : item.text;
     ctx.fillText(text, radius - 10, 5);
     ctx.restore();
   });
@@ -323,6 +318,17 @@ document.getElementById("magicAdd").addEventListener("click", () => {
 
 function renderList() {
   itemList.innerHTML = "";
+
+  if (items.length === 0) {
+    const available = predefinedChallenges.slice().sort(() => 0.5 - Math.random()).slice(0, 7);
+    available.forEach(text => {
+      items.push({ text, color: getRandomColor() });
+    });
+    saveData();
+    renderList(); // دوباره فراخوانی کن تا لیست و چرخ به‌روزرسانی بشن
+    return; // فقط اینجا مجازه چون داخل یک تابع هست
+  }
+
 
   items.forEach((item, index) => {
     const li = document.createElement("li");
@@ -365,7 +371,6 @@ function renderList() {
 
   drawWheel();
 }
-
 
 
 function addItem() {
@@ -462,7 +467,7 @@ function spinWheel() {
       background: document.body.classList.contains("dark") ? "#2c2c3c" : "#ffffff",
       color: document.body.classList.contains("dark") ? "#f1f1f1" : "#000000"
     });
-
+    document.getElementById("lastSelectedBox").textContent = `آخرین چالش: ${selected.text}`;
     if (autoRemove.checked) {
       removedItems.push(selected.text);
       saveData();
@@ -480,6 +485,7 @@ clearAll.onclick = () => {
   removedItems = [];
   saveData();
   renderList();
+  drawWheel(); // اضافه کن
 };
 
 itemInput.addEventListener("keydown", function (e) {
@@ -515,3 +521,35 @@ window.addEventListener('resize', () => {
   resizeCanvas();
   renderList();
 });
+
+const wheelSizeSlider = document.getElementById("wheelSizeSlider");
+let wheelSize = parseInt(localStorage.getItem("wheelSize")) || 700;
+
+wheelSizeSlider.value = wheelSize;
+setWheelSize(wheelSize);
+
+wheelSizeSlider.addEventListener("input", () => {
+  wheelSize = parseInt(wheelSizeSlider.value);
+  localStorage.setItem("wheelSize", wheelSize);
+  setWheelSize(wheelSize);
+});
+
+function setWheelSize(size) {
+  const container = document.querySelector(".wheel-container");
+  container.style.width = `${size}px`;
+  container.style.height = `${size}px`;
+  resizeCanvas(size);
+  drawWheel();
+}
+
+function resizeCanvas() {
+  const size = parseInt(localStorage.getItem("wheelSize")) || 700;
+  const scale = window.devicePixelRatio || 1;
+
+  canvas.width = size * scale;
+  canvas.height = size * scale;
+  canvas.style.width = `${size}px`;
+  canvas.style.height = `${size}px`;
+
+  ctx.setTransform(scale, 0, 0, scale, 0, 0); // برای وضوح بالا
+}

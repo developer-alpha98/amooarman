@@ -17,7 +17,6 @@
 <header class="header-bg">
   <button id="themeToggle">
     <i class="fa fa-moon"></i></button>
-
   <img src="img/logo.png" alt="Logo" class="header__logo" />
 </header>
 
@@ -31,6 +30,11 @@
   </div>
 
   <div class="input-section">
+    <div id="lastSelectedBox" class="last-selected-box">آخرین چالش: هنوز انتخاب نشده</div>
+    <div class="wheel-size-slider clash-bg">
+      <label for="wheelSizeSlider">اندازه گردونه</label>
+      <input type="range" id="wheelSizeSlider" min="340" max="700" value="600">
+    </div>
     <div class="input-group">
       <!-- در داخل input-group، بعد از دکمه افزودن -->
       <i id="magicAdd" class="fa fa-wand-magic-sparkles" title="افزودن ۱۵ چالش تصادفی" style="margin-left: 10px; margin-top: 15px; cursor: pointer; color: #fff; font-size: 20px;"></i>
